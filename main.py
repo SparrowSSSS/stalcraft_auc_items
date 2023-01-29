@@ -8,7 +8,6 @@ while True:
         print("---")
         print("breaking the connection...")
         print("---")
-        continue
 
 token = os.environ["TOKEN"]
 headers = {
@@ -36,13 +35,16 @@ for i in range(1, 3):
         try:
             conn.request("GET", f"/ru/auction/{data[a]['data'][-9: -5]}/history", headers=headers)
         except:
+            print("---")
+            print("breaking the connection...")
+            print("---")
             continue
         res = conn.getresponse()
         d = json.loads(res.read().decode("utf-8"))
         print(a/len(data)*100)
         try:
             if d["total"] > 0:
-                newData.append({'data': "", 'icon': "", 'name_ru': "", 'name_eu': "", 'id': ""})
+                newData.append({'data': "", 'icon': "", 'name_ru': "", 'name_en': "", 'id': ""})
                 newData[b]['data'] = data[a]['data']
                 newData[b]['icon'] = data[a]['icon']
                 newData[b]['name_ru'] = data[a]['name']['lines']['ru']
@@ -60,3 +62,4 @@ for i in range(1, 3):
         json.dump(newData, write_file, ensure_ascii=False)
         print("---")
         print(f"s_data_{type}.json is saved")
+        print("---")
