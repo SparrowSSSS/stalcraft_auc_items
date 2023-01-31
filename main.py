@@ -34,22 +34,33 @@ for i in range(1, 3):
     while a < len(data):
         try:
             conn.request("GET", f"/ru/auction/{data[a]['data'][-9: -5]}/history", headers=headers)
+            res = conn.getresponse()
         except:
             print("---")
             print("breaking the connection...")
             print("---")
             continue
-        res = conn.getresponse()
         d = json.loads(res.read().decode("utf-8"))
         print(a/len(data)*100)
         try:
             if d["total"] > 0:
-                newData.append({'data': "", 'icon': "", 'name_ru': "", 'name_en': "", 'id': ""})
+                while True:
+                    try:
+                        response = requests.get(f"https://raw.githubusercontent.com/EXBO-Studio/stalcraft-database/main/{type}/{data[a]['data']}")
+                        break
+                    except:
+                        print("---")
+                        print("breaking the connection...")
+                        print("---")
+                        continue
+                c = json.loads(response.text)
+                newData.append({'data': "", 'icon': "", 'name_ru': "", 'name_en': "", 'id': "", 'category': ""})
                 newData[b]['data'] = data[a]['data']
                 newData[b]['icon'] = data[a]['icon']
                 newData[b]['name_ru'] = data[a]['name']['lines']['ru']
                 newData[b]['name_en'] = data[a]['name']['lines']['en']
                 newData[b]['id'] = data[a]['data'][-9: -5]
+                newData[b]['category'] = c['category']
                 b+=1
             a+=1
         except KeyError:
