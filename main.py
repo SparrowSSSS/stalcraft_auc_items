@@ -54,12 +54,22 @@ for i in range(1, 3):
                         print("---")
                         continue
                 c = json.loads(response.text)
-                newData.append({'data': "", 'icon': "", 'name_ru': "", 'name_en': "", 'id': "", 'category': ""})
+                newData.append({'data': "", 'icon': "", 'name_ru': "", 'name_en': "", 'id': "", 'one_category': "", 'two_category': "", 'category': ""})
                 newData[b]['data'] = data[a]['data']
                 newData[b]['icon'] = data[a]['icon']
                 newData[b]['name_ru'] = data[a]['name']['lines']['ru']
                 newData[b]['name_en'] = data[a]['name']['lines']['en']
                 newData[b]['id'] = data[a]['data'][-9: -5]
+                one_category = ""
+                for i in range(len(c['category'])):
+                    if c['category'][i] == "/":
+                        one_category = c['category'][ : i]
+                        two_category = c['category'][i+1 : ]
+                if one_category != "":
+                    newData[b]['one_category'] = one_category
+                    newData[b]['two_category'] = two_category
+                else:
+                    newData[b]['one_category'] = c['category']
                 newData[b]['category'] = c['category']
                 b+=1
             a+=1
